@@ -1,7 +1,7 @@
 import { Alarm } from "./Alarm";
 
 export interface AlarmRepository {
+    findById(id: bigint): Promise<Alarm | null>;
     save(alarm: Alarm): Promise<Alarm>;
-    findById(id: number): Promise<Alarm | null>;
-    delete(id: number): Promise<void>;
+    delete(id: bigint): Promise<void>;
 }

@@ -1,5 +1,5 @@
 export interface AlarmProps {
-    id?: number;
+    id?: bigint;
     guildId: string;
     channelId: string;
     triggerAt: Date;
@@ -8,7 +8,7 @@ export interface AlarmProps {
 }
 
 export class Alarm {
-    readonly id?: number;
+    readonly id?: bigint;
     readonly guildId: string;
     readonly channelId: string;
     readonly triggerAt: Date;

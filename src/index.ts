@@ -1,22 +1,19 @@
-import { Client, GatewayIntentBits } from "discord.js";
+import "dotenv/config";
+import { AlarmbotClient } from "./api/AlarmbotClient";
 
 const DISCORD_TOKEN = process.env.DISCORD_BOT_TOKEN;
+const LEGACY_DISCORD_TOKEN = process.env.DISCORD_TOKEN;
 
 async function main() {
-    if (DISCORD_TOKEN === undefined) {
-        throw new Error("DISCORD_TOKEN environment variable is not set.");
+    const token = DISCORD_TOKEN ?? LEGACY_DISCORD_TOKEN;
+    if (token === undefined) {
+        throw new Error(
+            "DISCORD_BOT_TOKEN (or DISCORD_TOKEN) environment variable is not set.",
+        );
     }
 
-    const client = new Client({
-        intents: [
-            GatewayIntentBits.Guilds,
-            GatewayIntentBits.GuildVoiceStates,
-            GatewayIntentBits.MessageContent,
-            GatewayIntentBits.DirectMessages,
-        ],
-    });
-
-    await client.login(DISCORD_TOKEN);
+    const client = new AlarmbotClient();
+    await client.login(token);
 }
 
 main();

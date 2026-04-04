@@ -1,0 +1,45 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum AccessPrincipalType {
+  USER
+  ROLE
+}
+
+model Alarm {
+  id         BigInt   @id @default(autoincrement())
+  guildId    String   @db.VarChar(255)
+  channelId  String   @db.VarChar(255)
+  timeOfDay  String   @db.VarChar(5)
+  triggerAt  DateTime
+  createdAt  DateTime @default(now())
+  modifiedAt DateTime @updatedAt
+  isDeleted  Boolean  @default(false)
+
+  @@index([guildId, timeOfDay, isDeleted])
+  @@index([isDeleted, triggerAt])
+}
+
+model GuildCommandAccess {
+  id            BigInt              @id @default(autoincrement())
+  guildId       String              @db.VarChar(255)
+  principalType AccessPrincipalType
+  principalId   String              @db.VarChar(255)
+  createdAt     DateTime            @default(now())
+  modifiedAt    DateTime            @updatedAt
+
+  @@unique([guildId, principalType, principalId])
+  @@index([guildId])
+}

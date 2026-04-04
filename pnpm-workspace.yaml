@@ -1,5 +1,7 @@
 onlyBuiltDependencies:
+  - '@discordjs/opus'
   - '@prisma/engines'
   - esbuild
+  - ffmpeg-static
   - prisma
   - unrs-resolver

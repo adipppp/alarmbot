@@ -139,3 +139,12 @@ vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 
 src/generated/prisma
+
+# Docker volumes and data
+db-data/
+postgres-data/
+
+# Docker Compose overrides
+compose.override.yaml
+.env.local
+.env.docker

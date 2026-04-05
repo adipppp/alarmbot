@@ -1,0 +1,65 @@
+# Discord Alarm Bot - Docker Compose Configuration
+# This setup includes the bot service and a PostgreSQL database with persistent storage
+# 
+# Services:
+# - alarmbot: Discord bot application
+# - db: PostgreSQL database
+#
+# For more information, visit the Docker Compose reference guide at
+# https://docs.docker.com/go/compose-spec-reference/
+
+services:
+  alarmbot:
+    build:
+      context: .
+    container_name: alarmbot
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}?schema=public
+      DISCORD_BOT_TOKEN: ${DISCORD_BOT_TOKEN}
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000', () => {})"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - alarmbot-network
+    volumes:
+      - ./migu_alarm.m4a:/usr/src/app/migu_alarm.m4a:ro
+
+  db:
+    image: postgres:17-alpine
+    container_name: alarmbot-db
+    restart: unless-stopped
+    user: postgres
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8"
+    ports:
+      - "${DB_PORT}:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - alarmbot-network
+
+volumes:
+  db-data:
+    driver: local
+
+networks:
+  alarmbot-network:
+    driver: bridge
+

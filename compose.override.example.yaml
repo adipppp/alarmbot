@@ -1,0 +1,30 @@
+# Docker Compose Override - Development Configuration (Optional)
+# 
+# This file is automatically loaded if named 'compose.override.yaml'
+# Uncomment sections below for development-specific settings
+#
+# Usage: Just rename this file to 'compose.override.yaml' and Docker Compose
+# will automatically merge it with the main compose.yaml
+
+# services:
+#   alarmbot:
+#     # Mount source code for live development
+#     volumes:
+#       - ./src:/usr/src/app/src
+#       - ./dist:/usr/src/app/dist
+#     # Disable health check for faster iteration
+#     healthcheck:
+#       disable: true
+#     # Optional: expose debug port
+#     # ports:
+#     #   - "9229:9229"
+#     # environment:
+#     #   NODE_OPTIONS: "--inspect=0.0.0.0:9229"
+#
+#   db:
+#     # Expose database on all interfaces for external tools
+#     ports:
+#       - "5432:5432"
+#     # Keep container for debugging
+#     # Doesn't restart immediately on exit
+#     restart: "no"
